@@ -1,0 +1,753 @@
+ index.html
+
+```html
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ne Kadar Jungkook Fanısın? 💜</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:
+        radial-gradient(circle at 15% 10%, #4b168c 0%, transparent 30%),
+        radial-gradient(circle at 90% 90%, #6b176f 0%, transparent 30%),
+        #08050d;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 94%;
+    max-width: 720px;
+    margin: 30px auto;
+}
+
+.card {
+    background: rgba(15, 8, 25, 0.94);
+    border: 1px solid rgba(190, 100, 255, 0.25);
+    border-radius: 28px;
+    padding: 35px;
+    box-shadow:
+        0 0 45px rgba(157, 50, 255, 0.18),
+        inset 0 0 25px rgba(255,255,255,0.02);
+}
+
+/* BAŞLANGIÇ */
+
+#startScreen {
+    text-align: center;
+}
+
+.big-emoji {
+    font-size: 72px;
+    margin-bottom: 18px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-9px);
+    }
+}
+
+h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #fff, #d59aff, #fff);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.subtitle {
+    color: #cbb9d8;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.start-button,
+.restart-button {
+    border: none;
+    border-radius: 999px;
+    padding: 16px 34px;
+    color: white;
+    background: linear-gradient(90deg, #7928ca, #b52cff);
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(181,44,255,.35);
+    transition: .25s;
+}
+
+.start-button:hover,
+.restart-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 38px rgba(181,44,255,.6);
+}
+
+.note {
+    margin-top: 20px;
+    color: #766680;
+    font-size: 13px;
+}
+
+/* TEST */
+
+#quizScreen,
+#resultScreen {
+    display: none;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    color: #aa96b9;
+    font-size: 14px;
+    margin-bottom: 17px;
+}
+
+.progress-container {
+    height: 8px;
+    width: 100%;
+    background: #25152f;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #8b2be2, #e879f9);
+    transition: width .35s ease;
+}
+
+.question {
+    font-size: 25px;
+    line-height: 1.45;
+    margin-bottom: 25px;
+}
+
+.answers {
+    display: grid;
+    gap: 13px;
+}
+
+.answer {
+    border: 1px solid #392546;
+    background: #150b1e;
+    color: white;
+    border-radius: 15px;
+    padding: 17px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.answer:hover {
+    border-color: #a855f7;
+    background: #24122f;
+    transform: translateX(4px);
+}
+
+.answer:disabled {
+    cursor: default;
+}
+
+/* SONUÇ */
+
+#resultScreen {
+    text-align: center;
+}
+
+.result-emoji {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.result-title {
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.result-message {
+    font-size: 27px;
+    line-height: 1.4;
+    color: #e3b4ff;
+    margin: 20px 0;
+}
+
+.wrong-count {
+    color: #bca9c8;
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.score-box {
+    margin: 25px auto;
+    padding: 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid #30203c;
+}
+
+.score-percent {
+    font-size: 45px;
+    font-weight: bold;
+    color: #d28aff;
+}
+
+@media (max-width: 600px) {
+    .card {
+        padding: 25px 19px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    .question {
+        font-size: 21px;
+    }
+
+    .result-message {
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- BAŞLANGIÇ -->
+
+    <div class="card" id="startScreen">
+
+        <div class="big-emoji">🐰💜</div>
+
+        <h1>Ne Kadar Jungkook Fanısın?</h1>
+
+        <p class="subtitle">
+            Jungkook hakkında gerçekten ne kadar şey biliyorsun?
+            <br><br>
+            20 soruyu cevapla ve sonunda ne kadar büyük bir Jungkook fanı
+            olduğunu öğren!
+        </p>
+
+        <button class="start-button" onclick="startQuiz()">
+            TESTE BAŞLA ✨
+        </button>
+
+        <div class="note">
+            20 soru • Sonuç yalnızca testin sonunda açıklanır
+        </div>
+
+    </div>
+
+
+    <!-- TEST -->
+
+    <div class="card" id="quizScreen">
+
+        <div class="top">
+            <span id="questionNumber">Soru 1 / 20</span>
+            <span>🐰💜</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <h2 class="question" id="question"></h2>
+
+        <div class="answers" id="answers"></div>
+
+    </div>
+
+
+    <!-- SONUÇ -->
+
+    <div class="card" id="resultScreen">
+
+        <div class="result-emoji" id="resultEmoji">🐰💜</div>
+
+        <h2 class="result-title">
+            TEST BİTTİ!
+        </h2>
+
+        <div class="score-box">
+            <div class="score-percent" id="percentage">
+                %0
+            </div>
+
+            <div style="color:#9884a5; margin-top:6px;">
+                Jungkook fanlık seviyesi
+            </div>
+        </div>
+
+        <div class="result-message" id="resultMessage"></div>
+
+        <p class="wrong-count" id="wrongCount"></p>
+
+        <button class="restart-button" onclick="restartQuiz()">
+            🔄 TEKRAR ÇÖZ
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   SORULAR
+========================= */
+
+const questions = [
+
+    {
+        question: "Jungkook'un doğum tarihi nedir?",
+        answers: [
+            "1 Eylül 1997",
+            "12 Eylül 1997",
+            "1 Ekim 1997",
+            "13 Haziran 1997"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook hangi grupta yer alıyor?",
+        answers: [
+            "EXO",
+            "BTS",
+            "TXT",
+            "ENHYPEN"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Jungkook BTS'in hangi üyesidir?",
+        answers: [
+            "En büyük üye",
+            "Lider",
+            "En küçük üye",
+            "İkinci en büyük üye"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Jungkook'un en bilinen lakaplarından biri hangisidir?",
+        answers: [
+            "Worldwide Handsome",
+            "Golden Maknae",
+            "Moon",
+            "Tata"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Jungkook'un solo albümünün adı nedir?",
+        answers: [
+            "FACE",
+            "Layover",
+            "GOLDEN",
+            "D-DAY"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Jungkook hangi ülkede doğmuştur?",
+        answers: [
+            "Japonya",
+            "Güney Kore",
+            "Çin",
+            "Tayland"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Jungkook BTS'te özellikle hangi özelliğiyle bilinir?",
+        answers: [
+            "Vokali",
+            "Liderliği",
+            "Sadece rap yapması",
+            "Grubun en büyük üyesi olması"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook ile hayranların sıkça ilişkilendirdiği emoji hangisidir?",
+        answers: [
+            "🐰",
+            "🐯",
+            "🐨",
+            "🐱"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "GOLDEN albümü hangi yıl yayımlandı?",
+        answers: [
+            "2021",
+            "2022",
+            "2023",
+            "2024"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Jungkook'un solo şarkılarından biri hangisidir?",
+        answers: [
+            "Seven",
+            "Arson",
+            "Wild Flower",
+            "Like Crazy"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook'un doğduğu şehir hangisidir?",
+        answers: [
+            "Busan",
+            "Seul",
+            "Daegu",
+            "Gwangju"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook BTS'e kaç yaşında katıldı?",
+        answers: [
+            "13",
+            "15",
+            "17",
+            "19"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Jungkook'un GOLDEN albümündeki şarkılardan biri hangisidir?",
+        answers: [
+            "Standing Next to You",
+            "ON",
+            "Spring Day",
+            "Black Swan"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook'un solo şarkılarından 'Seven'da hangi sanatçı yer aldı?",
+        answers: [
+            "IU",
+            "Halsey",
+            "Latto",
+            "Sia"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Jungkook'un 'Standing Next to You' şarkısı hangi albümde yer alır?",
+        answers: [
+            "GOLDEN",
+            "BE",
+            "Map of the Soul: 7",
+            "Love Yourself: Answer"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook BTS'in hangi yılında çıkış yaptı?",
+        answers: [
+            "2011",
+            "2012",
+            "2013",
+            "2014"
+        ],
+        correct: 2
+    },
+
+    {
+        question: "Jungkook'un BTS'teki rolünü en iyi açıklayan seçenek hangisidir?",
+        answers: [
+            "Maknae ve vokalist",
+            "Lider ve rapçi",
+            "Sadece dansçı",
+            "En büyük üye"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook'un İngilizce solo şarkılarından biri hangisidir?",
+        answers: [
+            "Seven",
+            "Daechwita",
+            "Closer Than This",
+            "Still Life"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Jungkook'un solo albümü GOLDEN'da kaç şarkı bulunur?",
+        answers: [
+            "8",
+            "10",
+            "12",
+            "15"
+        ],
+        correct: 1
+    },
+
+    {
+        question: "Jungkook'un hayranlar arasında kullanılan 'Golden Maknae' lakabındaki 'Maknae' ne anlama gelir?",
+        answers: [
+            "Lider",
+            "En küçük üye",
+            "Ana dansçı",
+            "En büyük üye"
+        ],
+        correct: 1
+    }
+
+];
+
+
+/* =========================
+   DEĞİŞKENLER
+========================= */
+
+let currentQuestion = 0;
+let wrongAnswers = 0;
+
+
+/* =========================
+   TESTİ BAŞLAT
+========================= */
+
+function startQuiz() {
+
+    currentQuestion = 0;
+    wrongAnswers = 0;
+
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("resultScreen").style.display = "none";
+    document.getElementById("quizScreen").style.display = "block";
+
+    showQuestion();
+}
+
+
+/* =========================
+   SORUYU GÖSTER
+========================= */
+
+function showQuestion() {
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("questionNumber").textContent =
+        `Soru ${currentQuestion + 1} / ${questions.length}`;
+
+    document.getElementById("progress").style.width =
+        `${((currentQuestion) / questions.length) * 100}%`;
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    const answersDiv = document.getElementById("answers");
+
+    answersDiv.innerHTML = "";
+
+    q.answers.forEach((answer, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "answer";
+        button.textContent = answer;
+
+        button.onclick = function() {
+            selectAnswer(index);
+        };
+
+        answersDiv.appendChild(button);
+
+    });
+}
+
+
+/* =========================
+   CEVAP
+========================= */
+
+function selectAnswer(selected) {
+
+    const q = questions[currentQuestion];
+
+    /*
+       ÖNEMLİ:
+       Burada doğru/yanlış gösterilmiyor.
+       Kullanıcı test boyunca kaç yanlış yaptığını göremiyor.
+    */
+
+    if (selected !== q.correct) {
+        wrongAnswers++;
+    }
+
+    const buttons = document.querySelectorAll(".answer");
+
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+
+            showQuestion();
+
+        } else {
+
+            showResult();
+
+        }
+
+    }, 350);
+}
+
+
+/* =========================
+   SONUÇ
+========================= */
+
+function showResult() {
+
+    document.getElementById("quizScreen").style.display = "none";
+    document.getElementById("resultScreen").style.display = "block";
+
+    const correctAnswers =
+        questions.length - wrongAnswers;
+
+    const percentage =
+        Math.round((correctAnswers / questions.length) * 100);
+
+    document.getElementById("percentage").textContent =
+        `%${percentage}`;
+
+
+    let message = "";
+    let emoji = "";
+
+
+    if (wrongAnswers === 0) {
+
+        message =
+            "Sen nasıl bi fansın ya gözlerim yaşardı 🥹💜";
+
+        emoji = "😭🐰💜";
+
+    }
+
+    else if (wrongAnswers === 1) {
+
+        message =
+            "%99 Jungkook fanısın 💜";
+
+        emoji = "🐰💜";
+
+    }
+
+    else if (wrongAnswers >= 2 && wrongAnswers <= 5) {
+
+        message =
+            "Biraz yanlış varr ama yine de deli fan sayılırsın 🔥";
+
+        emoji = "😎🐰";
+
+    }
+
+    else if (wrongAnswers >= 6 && wrongAnswers <= 15) {
+
+        message =
+            "Sen ne diye fansın 😭";
+
+        emoji = "😭🐰";
+
+    }
+
+    else {
+
+        message =
+            "Sen fan olmaktan çık bence 💀";
+
+        emoji = "💀🐰";
+
+    }
+
+
+    document.getElementById("resultMessage").textContent =
+        message;
+
+    document.getElementById("resultEmoji").textContent =
+        emoji;
+
+    document.getElementById("wrongCount").textContent =
+        `${wrongAnswers} yanlış yaptın • ${correctAnswers} doğru yaptın • ${percentage}%`;
+
+
+    document.getElementById("progress").style.width = "100%";
+}
+
+
+/* =========================
+   TEKRAR
+========================= */
+
+function restartQuiz() {
+
+    document.getElementById("resultScreen").style.display = "none";
+    document.getElementById("startScreen").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>
+```
